@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CyberTech Robotics SRL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0A0D14;
+      --surface:   #111520;
+      --border:    #1E2538;
+      --accent:    #00C8FF;
+      --accent2:   #0066FF;
+      --text:      #E8EBF4;
+      --muted:     #6B748A;
+      --white:     #FFFFFF;
+      --gradient:  linear-gradient(135deg, #00C8FF 0%, #0066FF 100%);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6vw;
+      background: rgba(10,13,20,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 6vw 5rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,102,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,200,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { max-width: 780px; position: relative; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .highlight {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: var(--gradient);
+      color: var(--white);
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── STATS ── */
+    .stats-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      overflow-x: auto;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 160px;
+      padding: 2rem 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 6vw;
+    }
+
+    .section-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .section-desc {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      max-width: 520px;
+      font-size: 1rem;
+    }
+
+    /* ── SERVICES ── */
+    #servicii { background: var(--surface); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      background: var(--surface);
+      padding: 2.5rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover { background: #161B2E; }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── ABOUT ── */
+    #despre {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gradient);
+    }
+
+    .about-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .about-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .badge {
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+
+    .skill-list {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .skill-name {
+      font-size: 0.85rem;
+      min-width: 180px;
+      color: var(--text);
+    }
+
+    .skill-bar {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 2px;
+      transform-origin: left;
+      animation: fillBar 1.2s ease forwards;
+      transform: scaleX(0);
+    }
+
+    @keyframes fillBar {
+      to { transform: scaleX(1); }
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--surface); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .contact-item:hover { border-color: var(--accent); }
+
+    .contact-item-icon {
+      width: 36px; height: 36px;
+      background: rgba(0,200,255,0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .contact-item-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 6vw;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      #despre { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .nav-links { display: none; }
+      .stats-bar { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+
+    /* scroll animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">CyberTech<span>Robotics</span></a>
+    <ul class="nav-links">
+      <li><a href="#servicii">Servicii</a></li>
+      <li><a href="#despre">Despre</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">CyberTech Robotics SRL</div>
+      <h1>Automatizare<br/>industrială de <span class="highlight">precizie</span></h1>
+      <p class="hero-desc">
+        Consultanță specializată în proiectarea de echipamente pentru automatizarea proceselor industriale și servicii de prototipare rapidă — de la concept la realitate.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Solicită consultanță →</a>
+        <a href="#servicii" class="btn-secondary">Vezi servicii</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-num">Ph.D</span>
+      <span class="stat-label">Doctorand Ing. Mecanică</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">2+</span>
+      <span class="stat-label">Servicii specializate</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Soluții personalizate</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">SRL</span>
+      <span class="stat-label">Entitate juridică înregistrată</span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="servicii">
+    <div class="section-header fade-in">
+      <span class="section-tag">// Servicii</span>
+      <h2>Ce oferim</h2>
+      <p class="section-desc">Soluții tehnice end-to-end pentru automatizarea proceselor industriale și prototipare.</p>
+    </div>
+    <div class="services-grid fade-in">
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <h3>Consultanță în Automatizare</h3>
+        <p>Proiectarea și optimizarea echipamentelor pentru automatizarea proceselor industriale. Analiză de proces, selecție sisteme, specificații tehnice complete și supervizare implementare.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>Proiectare Sisteme Robotice</h3>
+        <p>Soluții robotice personalizate pentru linii de producție, manipulare materiale și operații repetitive. De la arhitectura sistemului până la integrarea în mediul de producție existent.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔧</div>
+        <h3>Prototipare Rapidă</h3>
+        <p>Realizarea de prototipuri funcționale pentru validarea conceptelor tehnice. Iterație rapidă, testare și rafinare înainte de producția de serie — reducem costurile de development.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📐</div>
+        <h3>Inginerie Mecanică Avansată</h3>
+        <p>Proiectare CAD, analiză structurală și simulare dinamică pentru componente mecanice complexe. Expertiză academică aplicată în context industrial real.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="despre">
+    <div class="about-visual fade-in">
+      <div class="about-card">
+        <div class="about-name">Inginer Robotician</div>
+        <div class="about-title">// Doctorand · Ing. Mecanică</div>
+        <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;">
+          Specializare în sisteme robotice și automatizare industrială, cu activitate de cercetare doctorală în inginerie mecanică. Combin rigoarea academică cu expertiza practică pentru a livra soluții tehnice de înaltă calitate.
+        </p>
+        <div class="about-badges">
+          <span class="badge">Robotică</span>
+          <span class="badge">Automatizare</span>
+          <span class="badge">CAD/CAE</span>
+          <span class="badge">Prototipare</span>
+          <span class="badge">Cercetare</span>
+          <span class="badge">PLC/SCADA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text fade-in">
+      <span class="section-tag">// Despre noi</span>
+      <h2>Expertiză tehnică la cel mai înalt nivel</h2>
+      <p style="margin-top:1rem;">
+        CyberTech Robotics SRL este o firmă de consultanță specializată, fondată cu scopul de a aduce soluții de automatizare accesibile și eficiente pentru industria românească.
+      </p>
+      <p>
+        Activitatea de doctorat în inginerie mecanică ne permite să aplicăm cele mai recente metode de cercetare direct în proiectele clienților noștri — un avantaj competitiv real față de consultanții clasici.
+      </p>
+      <div class="skill-list">
+        <div class="skill-row">
+          <span class="skill-name">Proiectare Sisteme Robotice</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Automatizare Procese</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%; animation-delay:0.1s"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Prototipare Rapidă</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%; animation-delay:0.2s"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name">Cercetare & Dezvoltare</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%; animation-delay:0.3s"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-header fade-in">
+      <span class="section-tag">// Contact</span>
+      <h2>Hai să colaborăm</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <h3>Vorbim despre proiectul tău</h3>
+        <p>Ai un proiect de automatizare sau ai nevoie de un prototip? Contactează-ne pentru o evaluare inițială gratuită.</p>
+        <div class="contact-items">
+          <a href="mailto:contact@cybertechrobotics.ro" class="contact-item">
+            <div class="contact-item-icon">✉️</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">contact@cybertechrobotics.ro</div>
+            </div>
+          </a>
+          <div class="contact-item">
+            <div class="contact-item-icon">🏢</div>
+            <div>
+              <div class="contact-item-label">Firmă</div>
+              <div class="contact-item-value">CyberTech Robotics SRL</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div>
+              <div class="contact-item-label">Locație</div>
+              <div class="contact-item-value">România</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fade-in">
+        <div class="contact-form">
+          <div class="form-group">
+            <label>Nume</label>
+            <input type="text" placeholder="Numele tău" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="email@companie.ro" />
+          </div>
+          <div class="form-group">
+            <label>Mesaj</label>
+            <textarea placeholder="Descrie pe scurt proiectul sau întrebarea ta..."></textarea>
+          </div>
+          <button class="btn-primary" style="border:none; cursor:pointer; justify-content:center;">
+            Trimite mesaj →
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2024 <a href="#">CyberTech Robotics SRL</a>. Toate drepturile rezervate.</p>
+    <p>Proiectat cu ❤️ pentru automatizarea industriei românești</p>
+  </footer>
+
+  <script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
